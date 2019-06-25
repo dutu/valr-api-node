@@ -4,6 +4,9 @@ valr-api-node
 
 **valr-api-node** is a simple node.js wrapper for VALR REST and WebSocket API.
 
+Clients for both the [REST API](https://docs.valr.com/?version=latest#7d993732-7f64-42cb-86d3-1a1d1bf04557) and [streaming WebSocket API](https://docs.valr.com/?version=latest#da6a3bc7-51e6-4585-baa6-65502a7c8de7) are included.
+
+
 ### Contents
 * [Changelog](#changelog)
 * [Installation](#installation)
@@ -25,16 +28,14 @@ npm install --save valr-api-node
 
 # Quick examples
 
-Clients for both the [REST API](https://docs.valr.com/?version=latest#7d993732-7f64-42cb-86d3-1a1d1bf04557) and [streaming WebSocket API](https://docs.valr.com/?version=latest#da6a3bc7-51e6-4585-baa6-65502a7c8de7) are included.
-
 
 ### REST API example:
 
 ```js
 import Valr from 'valr-api-node'
 
-const gemini = new Gemini({ key, secret, sandbox: false })
-gemini.getOrderBook('btcusd', { limit_asks: 10, limit_bids: 10 })
+const valr = new VALR({ key, secret })
+valr.getMarketSummary({ currencyPair: 'BTCZAR' })
   .then(console.log)
   .catch(console.error)
 ```
@@ -42,10 +43,10 @@ gemini.getOrderBook('btcusd', { limit_asks: 10, limit_bids: 10 })
 ### WebSocket API examples:
 
 ```js
-import Gemini from 'gemini-api-node'
+import Valr from 'valr-api-node'
 
-const gemini = new Gemini()
-let ws = gemini.newWebSocketMarketData('btcusd', { 'top_of_book' : 'true', 'offers': true })
+const valr = new Valr({ key, secret })
+let ws = valr.newAccountWebSocket()
 
 ws.onopen = () => {
   console.log('Websocket is open')
@@ -58,19 +59,16 @@ ws.onmessage = (message) => {
 ```
 
 ```js
-import Gemini from 'gemini-api-node'
+import Valr from 'valr-api-node'
 
-const gemini = new Gemini({ key, secret, sandbox: true })
-let ws = gemini.newWebSocketOrderEvents({ symbolFilter: ['btcusd'], eventTypeFilter: ['fill', 'closed']})
+const valr = new Valr({ { key, secret } })
+let ws = valr.newTradeWebSocket()
 
 ws.onopen = () => {
   console.log('Websocket is open')
 }
   
-ws.onmessage = (message) => {
-  let data = JSON.parse(message.data)
-  console.log('Websocket data received')
-}
+
 ```
 
 
