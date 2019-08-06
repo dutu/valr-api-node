@@ -237,5 +237,64 @@ let jsonSchema = {
     }
   },
 
+  getSimpleQuote: {
+    title: 'getSimpleQuote schema',
+    description: 'Schema for getSimpleQuote results',
+    type: 'object',
+  },
+
+  simpleOrder: {
+    title: 'simpleOrder schema',
+    description: 'Schema for simpleOrder results',
+    type: 'object',
+  },
+
+  getSimpleOrderStatus: {
+    title: 'getSimpleOrderStatus schema',
+    description: 'Schema for getSimpleOrderStatus results',
+    type: 'object',
+  },
+
+  limitOrder: {
+    title: 'limitOrder schema',
+    description: 'Schema for limitOrder results',
+    type: 'object',
+  },
+
+  marketOrder: {
+    title: 'marketOrder schema',
+    description: 'Schema for marketOrder results',
+    type: 'object',
+  },
+
+  getOrderStatus: {
+    title: 'getOrderStatus schema',
+    description: 'Schema for getOrderStatus results',
+    type: 'object',
+  },
+
+  getOpenOrders: {
+    title: 'getOpenOrders schema',
+    description: 'Schema for getOpenOrders results',
+    type: 'array',
+  },
+
+  getOrderHistorySummary: {
+    title: 'getOrderHistorySummary schema',
+    description: 'Schema for getOrderHistorySummary results',
+    type: 'object',
+  },
+
+  getOrderHistoryDetail: {
+    title: 'getOrderHistoryDetail schema',
+    description: 'Schema for getOrderHistoryDetail results',
+    type: 'array',
+  },
+
+  cancelOrder: {
+    title: 'cancelOrder schema',
+    description: 'Schema for cancelOrder results',
+    type: 'string',
+  },
 }
 export default jsonSchema

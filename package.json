@@ -23,16 +23,16 @@
   "license": "MIT",
   "homepage": "https://github.com/dutu/valr-api-node",
   "devDependencies": {
-    "@babel/cli": "^7.2.3",
-    "@babel/core": "^7.4.0",
-    "@babel/preset-env": "^7.4.2",
-    "@babel/register": "^7.4.0",
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/register": "^7.5.5",
     "chai": "^4.2.0",
     "chai-json-schema": "^1.5.1",
-    "mocha": "^6.0.2"
+    "mocha": "^6.2.0"
   },
   "dependencies": {
     "superagent": "^5.1.0",
-    "ws": "^7.0.0"
+    "ws": "^7.1.1"
   }
 }

@@ -48,13 +48,10 @@ export default class Valr {
     }
 
     if (!this.key || !this.secret) {
-      throw new Error(
-        `API key and secret key required to use authenticated methods`,
-      );
+      throw new Error('API key and secret key required to use authenticated methods')
     }
 
     const requestPath = `/v1${path}${makeParamsString.call(this, params)}`
-
     try {
       let res  = await superagent(verb, `${this.baseUrl}/v1${path}`)
         .query(params)
@@ -66,7 +63,6 @@ export default class Valr {
     }
   }
 
-  // Public API
   getCurrencies() {
     return this.requestPublic(`/currencies`)
   }
@@ -175,25 +171,93 @@ export default class Valr {
     return this.requestPrivate('GET',`/marketdata/${params.currencyPair}/tradehistory`, p)
   }
 
-  // WebSocket
-  newWebSocketOrderEvents(options = {}) {
-    const requestPath = `/v1/order/events`
-    const params = makeParams(options)
+  getSimpleQuote(params) {
+    const body = {
+      payInCurrency: params.payInCurrency,
+      payAmount: params.payAmount,
+      side: params.side,
+    }
 
-    return new WebSocket(`${this.baseUrl}${requestPath}${params}`, createRequestConfig({
-      key: this.key,
-      secret: this.secret,
-      payload: {
-        nonce: Date.now(),
-        request: requestPath,
-      },
-    }))
+    return this.requestPrivate('POST',`/simple/${params.currencyPair}/quote`, {}, body)
   }
 
-  newWebSocketMarketData(symbol, options = {}) {
-    const requestPath = `/v1/marketdata`
-    const params = makeParams(options)
+  simpleOrder(params) {
+    const body = {
+      payInCurrency: params.payInCurrency,
+      payAmount: params.payAmount,
+      side: params.side,
+    }
 
-    return new WebSocket(`${this.baseUrl}${requestPath}/${symbol}${params}`)
+    return this.requestPrivate('POST',`/simple/${params.currencyPair}/order`, {}, body)
   }
+
+  getSimpleOrderStatus(params = {}) {
+    return this.requestPrivate('GET',`/simple/${params.currencyPair}/order/${params.orderId}`, params)
+  }
+
+  limitOrder(params) {
+    return this.requestPrivate('POST',`/orders/limit`, {}, params)
+  }
+
+  marketOrder(params) {
+    return this.requestPrivate('POST',`/orders/market`, {}, params)
+  }
+
+  getOrderStatus(params = {}) {
+    if (params instanceof Object && params.customerOrderId)
+      return this.requestPrivate('GET',`/orders/${params.currencyPair}/customerorderid/${params.customerOrderId}`, params)
+    else
+      return this.requestPrivate('GET',`/orders/${params.currencyPair}/orderid/${params.orderId}`, params)
+  }
+
+  getOpenOrders(params = {}) {
+    return this.requestPrivate('GET',`/orders/open`, params)
+  }
+
+  getOrderHistory(params = {}) {
+    return this.requestPrivate('GET',`/orders/history`, params)
+  }
+
+  getOrderHistorySummary(params) {
+    if (params instanceof Object && params.customerOrderId)
+      return this.requestPrivate('GET',`/orders/history/summary/customerorderid/${params.customerOrderId}`, {})
+    else
+      return this.requestPrivate('GET',`/orders/history/summary/orderid/${params.orderId}`, {})
+  }
+
+  getOrderHistoryDetail(params) {
+    if (params instanceof Object && params.customerOrderId)
+      return this.requestPrivate('GET',`/orders/history/detail/customerorderid/${params.customerOrderId}`, {})
+    else
+      return this.requestPrivate('GET',`/orders/history/detail/orderid/${params.orderId}`, {})
+  }
+
+  cancelOrder(params) {
+    return this.requestPrivate('DELETE',`/orders/order`, {}, params)
+  }
+
+
+  /*
+    // WebSocket
+    newWebSocketOrderEvents(options = {}) {
+      const requestPath = `/v1/order/events`
+      const params = makeParams(options)
+
+      return new WebSocket(`${this.baseUrl}${requestPath}${params}`, createRequestConfig({
+        key: this.key,
+        secret: this.secret,
+        payload: {
+          nonce: Date.now(),
+          request: requestPath,
+        },
+      }))
+    }
+
+    newWebSocketMarketData(symbol, options = {}) {
+      const requestPath = `/v1/marketdata`
+      const params = makeParams(options)
+
+      return new WebSocket(`${this.baseUrl}${requestPath}/${symbol}${params}`)
+    }
+  */
 }
