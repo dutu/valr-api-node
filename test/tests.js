@@ -53,7 +53,7 @@ let methods = [
 describe('rest API methods', async function() {
   methods.forEach(method => {
     it(`${method[0]}`, async function () {
-      await delay (0)
+      await delay (100)
       let res = await valr[method[0]](...method[1])
         .catch()
       expect(res).to.be.jsonSchema(jsonSchema[method[0]])
