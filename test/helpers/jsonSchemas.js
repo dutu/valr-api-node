@@ -285,6 +285,12 @@ let jsonSchema = {
     type: 'object',
   },
 
+  getOrderHistory: {
+    title: 'getOrderHistory schema',
+    description: 'Schema for getOrderHistory results',
+    type: 'array',
+  },
+
   getOrderHistoryDetail: {
     title: 'getOrderHistoryDetail schema',
     description: 'Schema for getOrderHistoryDetail results',
