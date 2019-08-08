@@ -37,7 +37,7 @@ let methods = [
 //  ['simpleOrder', [{ currencyPair: 'BTCZAR', payInCurrency: 'BTC', payAmount: '0.0001', side: 'SELL' }],],
   ['getSimpleOrderStatus', [{ currencyPair: 'BTCZAR', orderId: '7952019d-9647-4a4f-bf37-71d60e418016' }],],
 //  ['limitOrder', [{ pair: 'BTCZAR', side: 'BUY', quantity: '0.0001', price: '100000', postOnly: true, customerOrderId: '1234' }],],
-//  ['marketOrder', [{ pair: 'BTCZAR', side: 'SELL', baseAmount: '0.0001', customerOrderId: '12345' }],],
+//  ['marketOrder', [{ pair: 'BTCZAR', side: 'SELL', amount: '0.0001', customerOrderId: '12345' }],],
   ['getOrderStatus', [{ currencyPair: 'BTCZAR',  customerOrderId: '1234' }],],
   ['getOrderStatus', [{ currencyPair: 'BTCZAR',  orderId: '17635598-aca6-46ba-b3ff-0dec3d752aa3' }],],
   ['getOpenOrders', [],],
@@ -53,7 +53,7 @@ let methods = [
 describe('rest API methods', async function() {
   methods.forEach(method => {
     it(`${method[0]}`, async function () {
-      await delay (100)
+      await delay (200)
       let res = await valr[method[0]](...method[1])
         .catch()
       expect(res).to.be.jsonSchema(jsonSchema[method[0]])

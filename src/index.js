@@ -196,7 +196,18 @@ export default class Valr {
   }
 
   limitOrder(params) {
-    return this.requestPrivate('POST',`/orders/limit`, {}, params)
+    let p = Object.assign({}, params)
+    if (p.hasOwnProperty('amount') && p.side === 'BUY') {
+      p.quoteAmount = p.amount
+      delete p.amount
+    }
+
+    if (p.hasOwnProperty('amount') && p.side === 'SELL') {
+      p.baseAmount = p.amount
+      delete p.amount
+    }
+
+    return this.requestPrivate('POST',`/orders/limit`, {}, p)
   }
 
   marketOrder(params) {
