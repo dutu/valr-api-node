@@ -46,13 +46,13 @@ valr.getMarketSummary({ currencyPair: 'BTCZAR' })
 import Valr from 'valr-api-node'
 
 const valr = new Valr({ key, secret })
-let ws = valr.newAccountWebSocket()
+let accountWebSocket = valr.newAccountWebSocket()
 
-ws.onopen = () => {
+accountWebSocket.onopen = () => {
   console.log('Websocket is open')
 }
   
-ws.onmessage = (message) => {
+accountWebSocket.onmessage = (message) => {
   let data = JSON.parse(message.data)
   console.log('Websocket data received')
 }
@@ -62,12 +62,34 @@ ws.onmessage = (message) => {
 import Valr from 'valr-api-node'
 
 const valr = new Valr({ { key, secret } })
-let ws = valr.newTradeWebSocket()
+let tradeWebSocket = valr.newTradeWebSocket()
 
-ws.onopen = () => {
+tradeWebSocket.onopen = () => {
   console.log('Websocket is open')
 }
   
+tradeWebSocket.onmessage = (msg) => {
+  message = true
+  if (msg.type === 'message' && JSON.parse(msg.data).type === 'AUTHENTICATED') {
+    const subscribeMessage = {
+      type: 'SUBSCRIBE',
+      subscriptions: [
+        {
+          event: 'MARKET_SUMMARY_UPDATE',
+          pairs: ['BTCZAR']
+        }
+      ]
+    }
+    tradeWebSocket.send(JSON.stringify(subscribeMessage))
+  }
+
+  if (msg.type === 'message' && JSON.parse(msg.data).type === 'MARKET_SUMMARY_UPDATE') {
+    console.log(msg.data)
+  }
+}
+
+tradeWebSocket.onerror = (...args) => {
+}
 
 ```
 

@@ -50,7 +50,7 @@ let methods = [
 //  ['cancelOrder', [{ pair: 'BTCZAR', customerOrderId: '1234' }],],
 ]
 
-describe('rest API methods', async function() {
+describe('REST API methods', async function() {
   methods.forEach(method => {
     it(`${method[0]}`, async function () {
       await delay (200)
@@ -58,5 +58,89 @@ describe('rest API methods', async function() {
         .catch()
       expect(res).to.be.jsonSchema(jsonSchema[method[0]])
     })
+  })
+})
+
+const TIMEOUT = 15000
+
+describe('WebSocket API', function() {
+  it(`Connects to Account Websocket`, function (done) {
+    let isdone  = false
+    let open = false
+    let message = false
+    let timeoutId = setTimeout(function() {
+      if (!open) expect(false, 'open has not been received').to.be.ok
+      if (!message) expect(false, 'message type "AUTHENTICATED" has not been received').to.be.ok
+      isdone || done()
+      isdone = true
+    }, TIMEOUT)
+
+    const accountWebSocket = valr.newAccountWebSocket()
+    accountWebSocket.onopen = (...args) => {
+      open = true
+    }
+
+    accountWebSocket.onmessage = (msg) => {
+      message = true
+      if (msg.type === 'message' && JSON.parse(msg.data).type === 'AUTHENTICATED') {
+        clearTimeout(timeoutId);
+        isdone || done()
+        isdone = true
+      }
+    }
+
+    accountWebSocket.onerror = (...args) => {
+      message = true
+      clearTimeout(timeoutId);
+      isdone || done(args)
+      isdone = true
+    }
+
+  })
+
+  it(`Connects to Trade Websocket`, function (done) {
+    let isdone  = false
+    let open = false
+    let message = false
+    let timeoutId = setTimeout(function() {
+      if (!open) expect(false, 'open has not been received').to.be.ok
+      if (!message) expect(false, 'message type "MARKET_SUMMARY_UPDATE" has not been received').to.be.ok
+      isdone || done()
+      isdone = true
+    }, TIMEOUT)
+
+    const tradeWebSocket = valr.newTradeWebSocket()
+    tradeWebSocket.onopen = (...args) => {
+      open = true
+    }
+
+    tradeWebSocket.onmessage = (msg) => {
+      message = true
+      if (msg.type === 'message' && JSON.parse(msg.data).type === 'AUTHENTICATED') {
+        const subscribeMessage = {
+          type: 'SUBSCRIBE',
+          subscriptions: [
+            {
+              event: 'MARKET_SUMMARY_UPDATE',
+              pairs: ['BTCZAR']
+            }
+          ]
+        }
+        tradeWebSocket.send(JSON.stringify(subscribeMessage))
+      }
+
+      if (msg.type === 'message' && JSON.parse(msg.data).type === 'MARKET_SUMMARY_UPDATE') {
+        clearTimeout(timeoutId);
+        isdone || done()
+        isdone = true
+      }
+    }
+
+    tradeWebSocket.onerror = (...args) => {
+      message = true
+      clearTimeout(timeoutId);
+      isdone || done(args)
+      isdone = true
+    }
   })
 })

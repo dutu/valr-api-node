@@ -1,7 +1,7 @@
 {
   "name": "valr-api-node",
-  "version": "1.0.0",
-  "description": "Simple node.js wrapper for VALR REST and WebSocket API",
+  "version": "1.1.0",
+  "description": "VALR exchange API client for REST and WebSocket",
   "main": "./dist/index.js",
   "scripts": {
     "test": "mocha --require @babel/register",
@@ -10,8 +10,8 @@
   },
   "repository": "http://github.com/dutu/valr-api-node.git",
   "keywords": [
-    "api",
     "valr",
+    "api",
     "bitcoin",
     "btc",
     "eth",
@@ -33,6 +33,6 @@
   },
   "dependencies": {
     "superagent": "^5.1.0",
-    "ws": "^7.1.1"
+    "ws": "^7.1.2"
   }
 }

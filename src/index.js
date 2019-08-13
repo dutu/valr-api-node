@@ -2,6 +2,25 @@ import WebSocket from 'ws'
 import superagent from 'superagent'
 import crypto from 'crypto';
 
+
+const makeRequestHeaders = function makeRequestHeaders (key, secret, verb, path, body) {
+  const timestamp = Date.now()
+  let signature = crypto
+    .createHmac(`sha512`, secret)
+    .update(timestamp.toString())
+    .update(verb.toUpperCase())
+    .update(path)
+    .update(body && JSON.stringify(body) || '')
+    .digest(`hex`)
+
+  return {
+    'X-VALR-API-KEY': key,
+    'X-VALR-TIMESTAMP': timestamp.toString(),
+    'X-VALR-SIGNATURE': signature,
+  }
+}
+
+
 export default class Valr {
   constructor({ key, secret }) {
     this.key = key;
@@ -17,23 +36,6 @@ export default class Valr {
   }
 
   async requestPrivate(verb, path, params = {}, body) {
-    const makeRequestHeaders = function makeRequestHeaders (verb, path, body) {
-      const timestamp = Date.now()
-      let signature = crypto
-        .createHmac(`sha512`, this.secret)
-        .update(timestamp.toString())
-        .update(verb.toUpperCase())
-        .update(path)
-        .update(body && JSON.stringify(body) || '')
-        .digest(`hex`)
-
-      return {
-        'X-VALR-API-KEY': this.key,
-        'X-VALR-TIMESTAMP': timestamp.toString(),
-        'X-VALR-SIGNATURE': signature,
-      }
-    }
-
     const makeParamsString = function makeParamsString(params = {}) {
       let paramsString = Object.keys(params)
         .reduce((acc, crtKey) => {
@@ -52,15 +54,11 @@ export default class Valr {
     }
 
     const requestPath = `/v1${path}${makeParamsString.call(this, params)}`
-    try {
-      let res  = await superagent(verb, `${this.baseUrl}/v1${path}`)
-        .query(params)
-        .set(makeRequestHeaders.call(this, verb, requestPath, body))
-        .send(body)
-      return res.body
-    } catch (e) {
-      console.log(e)
-    }
+    let res  = await superagent(verb, `${this.baseUrl}/v1${path}`)
+      .query(params)
+      .set(makeRequestHeaders(this.key, this.secret, verb, requestPath, body))
+      .send(body)
+    return res.body
   }
 
   getCurrencies() {
@@ -247,28 +245,16 @@ export default class Valr {
     return this.requestPrivate('DELETE',`/orders/order`, {}, params)
   }
 
-
-  /*
     // WebSocket
-    newWebSocketOrderEvents(options = {}) {
-      const requestPath = `/v1/order/events`
-      const params = makeParams(options)
+  newAccountWebSocket() {
+    const requestPath = `/ws/account`
+    const headers = makeRequestHeaders(this.key, this.secret, 'GET', requestPath)
+    return new WebSocket(`${this.baseUrl}${requestPath}`, { headers })
+  }
 
-      return new WebSocket(`${this.baseUrl}${requestPath}${params}`, createRequestConfig({
-        key: this.key,
-        secret: this.secret,
-        payload: {
-          nonce: Date.now(),
-          request: requestPath,
-        },
-      }))
-    }
-
-    newWebSocketMarketData(symbol, options = {}) {
-      const requestPath = `/v1/marketdata`
-      const params = makeParams(options)
-
-      return new WebSocket(`${this.baseUrl}${requestPath}/${symbol}${params}`)
-    }
-  */
+  newTradeWebSocket() {
+    const requestPath = `/ws/trade`
+    const headers = makeRequestHeaders(this.key, this.secret, 'GET', requestPath)
+    return new WebSocket(`${this.baseUrl}${requestPath}`, { headers })
+  }
 }
