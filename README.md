@@ -61,7 +61,7 @@ accountWebSocket.onmessage = (message) => {
 ```js
 import Valr from 'valr-api-node'
 
-const valr = new Valr({ { key, secret } })
+const valr = new Valr({ key, secret })
 let tradeWebSocket = valr.newTradeWebSocket()
 
 tradeWebSocket.onopen = () => {
@@ -69,7 +69,6 @@ tradeWebSocket.onopen = () => {
 }
   
 tradeWebSocket.onmessage = (msg) => {
-  message = true
   if (msg.type === 'message' && JSON.parse(msg.data).type === 'AUTHENTICATED') {
     const subscribeMessage = {
       type: 'SUBSCRIBE',
