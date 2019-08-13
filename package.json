@@ -1,6 +1,6 @@
 {
   "name": "valr-api-node",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "VALR exchange API client for REST and WebSocket",
   "main": "./dist/index.js",
   "scripts": {
