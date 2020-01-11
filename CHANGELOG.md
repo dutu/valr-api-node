@@ -4,6 +4,11 @@ All notable changes to this module are documented in this file.
 
 valr-api-node module adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.1.1] - 2020-01-11
+
+* Fixed: dependencies updated
+* Fixed: documentation for `getOpenOrders` 
+
 ## [1.1.1] - 2019-08-13 
 
 * Fixed: dependency vulnerability

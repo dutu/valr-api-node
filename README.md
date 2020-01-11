@@ -323,7 +323,7 @@ Parameter          |          | Description
 `orderId` or `customerOrderId` | required | `orderId` is the order id provided by VALR. `customerOrderId` is the order Id provided by you when creating the order. Either `orderId` or `customerOrderId` can be specified, but not both.  
 
 
-### `getAllOpenOrders()`
+### `getOpenOrders()`
 Returns all open orders for your account [:bookmark_tabs:](https://docs.valr.com/?version=latest#910bc498-b88d-48e8-b392-6cc94b8cb66d).
 
 

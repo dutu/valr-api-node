@@ -2,7 +2,6 @@ import WebSocket from 'ws'
 import superagent from 'superagent'
 import crypto from 'crypto';
 
-
 const makeRequestHeaders = function makeRequestHeaders (key, secret, verb, path, body) {
   const timestamp = Date.now()
   let signature = crypto
