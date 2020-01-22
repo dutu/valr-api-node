@@ -6,4 +6,7 @@
       { "targets": { "node": "current" } }
     ]
   ],
+  "ignore": [
+    ".mocharc.js"
+  ]
 }

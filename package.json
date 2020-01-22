@@ -1,11 +1,24 @@
 {
   "name": "valr-api-node",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "VALR exchange API client for REST and WebSocket",
+  "type": "commonjs",
   "main": "./dist/index.js",
+  "exports": {
+    ".": {
+      "require":  "./dist/index.js",
+      "default": "./dist/index.mjs"
+    },
+    "module": "./dist/index.mjs",
+
+  "engines": {
+    "node": ">= 6.x"
+  },
   "scripts": {
-    "test": "mocha --require @babel/register",
-    "build": "babel src -d dist",
+    "test": "mocha",
+    "build": "npm run build:cjs && npm run build:mjs",
+    "build:cjs": "babel src -d dist",
+    "build:mjs": "ncp src/index.js dist/index.mjs",
     "prepublish": "npm run build"
   },
   "repository": "http://github.com/dutu/valr-api-node.git",
@@ -17,19 +30,21 @@
     "eth",
     "zar",
     "REST",
-    "WebSocket"
+    "WebSocket",
+    "es6"
   ],
   "author": "dutu <dutu@protonmail.com>",
   "license": "MIT",
   "homepage": "https://github.com/dutu/valr-api-node",
   "devDependencies": {
-    "@babel/cli": "^7.7.7",
-    "@babel/core": "^7.7.7",
-    "@babel/preset-env": "^7.7.7",
-    "@babel/register": "^7.7.7",
+    "@babel/cli": "^7.8.3",
+    "@babel/core": "^7.8.3",
+    "@babel/preset-env": "^7.8.3",
+    "@babel/register": "^7.8.3",
     "chai": "^4.2.0",
     "chai-json-schema": "^1.5.1",
-    "mocha": "^7.0.0"
+    "mocha": "^7.0.0-esm1",
+    "ncp": "^2.0.0"
   },
   "dependencies": {
     "superagent": "^5.2.1",

@@ -5,7 +5,7 @@ import jsonSchema from './helpers/jsonSchemas.js'
 chai.use(chaiJsonSchema)
 const expect = chai.expect
 
-import Valr from '../src'
+import Valr from '../dist'
 
 const delay = ms => new Promise(res => setTimeout(res, ms))
 

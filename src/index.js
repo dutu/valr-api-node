@@ -19,8 +19,7 @@ const makeRequestHeaders = function makeRequestHeaders (key, secret, verb, path,
   }
 }
 
-
-export default class Valr {
+class Valr {
   constructor({ key, secret }) {
     this.key = key;
     this.secret = secret;
@@ -257,3 +256,5 @@ export default class Valr {
     return new WebSocket(`${this.baseUrl}${requestPath}`, { headers })
   }
 }
+
+export default Valr
