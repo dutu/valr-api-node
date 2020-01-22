@@ -6,11 +6,11 @@
   "main": "./dist/index.js",
   "exports": {
     ".": {
-      "require":  "./dist/index.js",
+      "require": "./dist/index.js",
       "default": "./dist/index.mjs"
-    },
-    "module": "./dist/index.mjs",
-
+    }
+  },
+  "module": "./dist/index.mjs",
   "engines": {
     "node": ">= 6.x"
   },
