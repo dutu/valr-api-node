@@ -19,6 +19,7 @@ let methods = [
   ['getMarketSummary', []],
   ['getMarketSummary', [{ currencyPair: 'BTCZAR' }]],
   ['getServerTime', [],],
+  ['getStatus', [],],
   ['getBalances', [],],
   ['getAccountTransactionHistory', [],],
   ['getAccountTradeHistory', [{ currencyPair: 'BTCZAR' }],],
@@ -58,6 +59,17 @@ describe('REST API methods', async function() {
         .catch()
       expect(res).to.be.jsonSchema(jsonSchema[method[0]])
     })
+  })
+})
+
+describe('REST API errors', function() {
+  it(`throws error 400`, function (done) {
+    valr.cancelOrder({ pair: 'BTCZAR', id: '8f31d81e-1a14-4cb0-b29c-2f7fb7a23bc2'})
+      .catch((err) => {
+        expect(err).to.be.an('error')
+        done()
+      })
+
   })
 })
 

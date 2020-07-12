@@ -87,6 +87,10 @@ class Valr {
     return this.requestPublic(`/time`)
   }
 
+  getStatus() {
+    return this.requestPublic(`/status`)
+  }
+
   getBalances(params) {
     return this.requestPrivate('GET',`/account/balances`, params)
   }
@@ -158,7 +162,9 @@ class Valr {
   getOrderBook(params) {
     let p = Object.assign({}, params)
     delete p.currencyPair
-      return this.requestPrivate('GET',`/marketdata/${params.currencyPair}/orderbook`, p)
+    let full = p.full && '/full'  || ''
+    delete p.full
+    return this.requestPrivate('GET',`/marketdata/${params.currencyPair}/orderbook${full}`, p)
   }
 
   getTradeHistory(params) {

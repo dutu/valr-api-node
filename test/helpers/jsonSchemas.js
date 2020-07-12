@@ -111,6 +111,13 @@ let jsonSchema = {
     }
   },
 
+  getStatus: {
+    title: 'getStatus schema',
+    description: 'Schema for getStatus results',
+    type: 'object',
+    required: ['status'],
+  },
+
   getBalances: {
     title: 'getBalances schema',
     description: 'Schema for getBalances results',

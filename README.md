@@ -1,6 +1,6 @@
 valr-api-node
 ====
-[![Build Status](https://travis-ci.com/dutu/valr-api-node.svg?branch=master)](https://travis-ci.com/dutu/valr-api-node) [![Dependency Status](https://dependencyci.com/github/dutu/valr-api-node/badge)](https://dependencyci.com/github/dutu/valr-api-node) 
+[![Build Status](https://travis-ci.com/dutu/valr-api-node.svg?branch=master)](https://travis-ci.com/dutu/valr-api-node)  [![dependencies Status](https://david-dm.org/dutu/valr-api-node/status.svg)](https://david-dm.org/dutu/valr-api-node)
 
 **valr-api-node** is a simple node.js wrapper for VALR REST and WebSocket API.
 
@@ -124,10 +124,15 @@ Parameter     |          | Description
 `currencyPair`| optional | Specify the currency pair for which you want to query the market summary
 
 
-
 ### `getServerTime()`
 
 Get the server time [:bookmark_tabs:](https://docs.valr.com/?version=latest#95f84056-2ac7-4f92-a5d9-fd0d9c104f01).
+
+
+### `getStatus()`
+
+Get the current status of VALR [:bookmark_tabs:](https://docs.valr.com/?version=latest#16ccc087-4f8c-49b0-aa43-fd4f472c6a52).
+
 
 ## Account
 The following APIs allow you to query your account balances and full transaction history. These APIs are protected and will require authentication.
@@ -234,12 +239,13 @@ Parameter            |          | Description
 These API calls can be used to receive the market data.
 
 
-### `getOrderBook({ currencyPair })`
+### `getOrderBook({ currencyPair, full })`
 Withdraw cryptocurrency funds to an address[:bookmark_tabs:](https://docs.valr.com/?version=latest#926f9245-35d1-4bca-a114-0af07bc229f7).
 
 Parameter            |          | Description 
 ---------------------|----------|-------------
 `currencyPair`       | required | Currency pair for which you want to query the order book. Supported currency pairs: `BTCZAR`
+`full`               | optional | `true` or `false` (default  = `false`). If it should return a list of all the bids and asks in the order book
 
 
 ### `getTradeHistory({ currencyPair, limit })`
