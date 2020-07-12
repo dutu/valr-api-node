@@ -8,9 +8,6 @@ valr-api-node module adheres to [Semantic Versioning](http://semver.org/).
 * Added: optional parameter `full` for method `getOrderBook`
 * Added: method `getStatus`
 
-* Fixed: updated mocha configuration
-* Added: ships module as ES (.mjs)
-
 ## [1.2.0] - 2020-01-11
 
 * Fixed: updated mocha configuration
