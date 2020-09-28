@@ -4,6 +4,9 @@ All notable changes to this module are documented in this file.
 
 valr-api-node module adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.3.1] - 2020-09-28
+* Fixed: dependencies updated
+
 ## [1.3.0] - 2020-07-12
 * Added: optional parameter `full` for method `getOrderBook`
 * Added: method `getStatus`
