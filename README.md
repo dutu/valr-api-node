@@ -1,6 +1,6 @@
 valr-api-node
 ====
-[![Build Status](https://travis-ci.com/dutu/valr-api-node.svg?branch=master)](https://travis-ci.com/dutu/valr-api-node)  [![dependencies Status](https://david-dm.org/dutu/valr-api-node/status.svg)](https://david-dm.org/dutu/valr-api-node)
+[![Build Status](https://travis-ci.com/dutu/valr-api-node.svg?branch=master)](https://travis-ci.com/dutu/valr-api-node)  
 
 **valr-api-node** is a simple node.js wrapper for VALR REST and WebSocket API.
 
@@ -138,6 +138,10 @@ Get the current status of VALR [:bookmark_tabs:](https://docs.valr.com/?version=
 The following APIs allow you to query your account balances and full transaction history. These APIs are protected and will require authentication.
 
 
+### `getApiKeyInfo()`
+Returns the current API Key's information and permissions [:bookmark_tabs:](https://docs.valr.com/?version=latest#af083ac6-0514-4979-9bab-f599ea1bed4f).
+
+
 ### `getBalances()`
 Returns the list of all wallets with their respective balances[:bookmark_tabs:](https://docs.valr.com/?version=latest#60455ec7-ecdc-42ad-9a57-64941299da52).
 
@@ -244,7 +248,7 @@ Withdraw cryptocurrency funds to an address[:bookmark_tabs:](https://docs.valr.c
 
 Parameter            |          | Description 
 ---------------------|----------|-------------
-`currencyPair`       | required | Currency pair for which you want to query the order book. Supported currency pairs: `BTCZAR`
+`currencyPair`       | required | Currency pair for which you want to query the order book. Supported currency pairs: Can be `BTCZAR`, `ETHZAR` or `XRPZAR`
 `full`               | optional | `true` or `false` (default  = `false`). If it should return a list of all the bids and asks in the order book
 
 
@@ -253,7 +257,7 @@ Withdraw cryptocurrency funds to an address[:bookmark_tabs:](https://docs.valr.c
 
 Parameter            |          | Description 
 ---------------------|----------|-------------
-`currencyPair`       | required | Currency pair for which you want to query the trade history. Supported currency pairs: `BTCZAR`
+`currencyPair`       | required | Currency pair for which you want to query the trade history. Supported currency pairs: Can be `BTCZAR`, `ETHZAR` or `XRPZAR`
 `limit`              | optional | Limit the number of items returned
 
 
@@ -304,7 +308,7 @@ Parameter          |          | Description
 `side`             | required | `BUY` or `SELL` 
 `quantity`         | required | Base amount in BTC
 `price`            | required | Price per coin in ZAR
-`pair`             | required | `BTCZAR`
+`pair`             | required | Can be `BTCZAR`, `ETHZAR` or `XRPZAR`
 `postOnly`         | optional | `true` or `false`
 `customerOrderId ` | optional | An unique Id across all open orders for a given account. Alphanumeric value with no special chars, limit of 50 characters
 
@@ -312,12 +316,32 @@ Parameter          |          | Description
 ### `marketOrder({ side, amount, pair, customerOrderId })`
 Create a new market order [:bookmark_tabs:](https://docs.valr.com/?version=latest#e1892b20-2b2a-44cf-a67b-1d86def85ec4).
 
-Parameter          |          | Description 
+Parameter          |          | Description
 -------------------|----------|-------------
-`side`             | required | `BUY` or `SELL` 
-`amount`           | required | Quote amount for `BUY`. Base amount for `SELL` 
-`pair`             | required | `BTCZAR`
+`side`             | required | `BUY` or `SELL`
+`amount`           | required | Quote amount for `BUY`. Base amount for `SELL`
+`pair`             | required | Can be `BTCZAR`, `ETHZAR` or `XRPZAR`
 `customerOrderId ` | optional | An unique Id across all open orders for a given account. Alphanumeric value with no special chars, limit of 50 characters
+
+
+### `stopLimitOrder({ side, amount, pair, customerOrderId })`
+Create a new market order [:bookmark_tabs:](https://docs.valr.com/?version=latest#4bdd004a-a7a0-4d75-b018-d0e4b7316614).
+
+Parameter          |          | Description
+-------------------|----------|-------------
+`side`             | required | `BUY` or `SELL`
+`quantity`         | required | Amount in Base Currency
+`price`            | required | The Limit Price at which the BUY or SELL order will be placed
+`pair`             | required | Can be `BTCZAR`, `ETHZAR` or `XRPZAR`
+`timeInForce`      | required | Can be `GTC`, `FOK` or `IOC`
+`stopPrice`        | required | The target price for the trade to trigger
+`type`             | required | Can be `TAKE_PROFIT_LIMIT` or `STOP_LOSS_LIMIT`
+`customerOrderId ` | optional | An unique Id across all open orders for a given account. Alphanumeric value with no special chars, limit of 50 characters
+
+
+### `batchOrders({ requests })`
+Create a batch of multiple orders, or cancel orders, in a single request [:bookmark_tabs:](https://docs.valr.com/?version=latest#bae7aee0-9768-4daa-8331-81096abf6934).
+See VALR API documentation for applicable parameters. 
 
 
 ### `getOrderStatus({ orderId, customerOrderId })`

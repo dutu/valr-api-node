@@ -21,14 +21,15 @@ const makeRequestHeaders = function makeRequestHeaders (key, secret, verb, path,
 
 class Valr {
   constructor({ key, secret }) {
-    this.key = key;
-    this.secret = secret;
-    this.baseUrl = 'https://api.valr.com';
+    this.key = key
+    this.secret = secret
+    this.restApiBaseUrl = 'https://api.valr.com'
+    this.wsApiBaseUrl = 'wss://api.valr.com'
   }
 
   async requestPublic(endpoint, params = {}) {
     let res  = await superagent
-      .get(`${this.baseUrl}/v1/public${endpoint}`)
+      .get(`${this.restApiBaseUrl}/v1/public${endpoint}`)
       .query(params)
     return res.body
   }
@@ -52,7 +53,7 @@ class Valr {
     }
 
     const requestPath = `/v1${path}${makeParamsString.call(this, params)}`
-    let res  = await superagent(verb, `${this.baseUrl}/v1${path}`)
+    let res  = await superagent(verb, `${this.restApiBaseUrl}/v1${path}`)
       .query(params)
       .set(makeRequestHeaders(this.key, this.secret, verb, requestPath, body))
       .send(body)
@@ -91,8 +92,12 @@ class Valr {
     return this.requestPublic(`/status`)
   }
 
-  getBalances(params) {
-    return this.requestPrivate('GET',`/account/balances`, params)
+  getApiKeyInfo() {
+    return this.requestPrivate('GET',`/account/api-keys/current`)
+  }
+
+  getBalances() {
+    return this.requestPrivate('GET',`/account/balances`)
   }
 
   getAccountTransactionHistory(params) {
@@ -216,6 +221,14 @@ class Valr {
     return this.requestPrivate('POST',`/orders/market`, {}, params)
   }
 
+  stopLimitOrder(params) {
+    return this.requestPrivate('POST',`/orders/stop/limit`, {}, params)
+  }
+
+  batchOrders(params) {
+    return this.requestPrivate('POST',`/batch/orders`, {}, params)
+  }
+
   getOrderStatus(params = {}) {
     if (params instanceof Object && params.customerOrderId)
       return this.requestPrivate('GET',`/orders/${params.currencyPair}/customerorderid/${params.customerOrderId}`, params)
@@ -253,13 +266,13 @@ class Valr {
   newAccountWebSocket() {
     const requestPath = `/ws/account`
     const headers = makeRequestHeaders(this.key, this.secret, 'GET', requestPath)
-    return new WebSocket(`${this.baseUrl}${requestPath}`, { headers })
+    return new WebSocket(`${this.wsApiBaseUrl}${requestPath}`, { headers })
   }
 
   newTradeWebSocket() {
     const requestPath = `/ws/trade`
     const headers = makeRequestHeaders(this.key, this.secret, 'GET', requestPath)
-    return new WebSocket(`${this.baseUrl}${requestPath}`, { headers })
+    return new WebSocket(`${this.wsApiBaseUrl}${requestPath}`, { headers })
   }
 }
 
