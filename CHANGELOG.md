@@ -4,6 +4,10 @@ All notable changes to this module are documented in this file.
 
 valr-api-node module adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.5.0] - 2021-11-23
+* Added: Feature to use secondary api key/secret 
+* Fixed: dependencies updated
+
 ## [1.4.0] - 2021-10-28
 * Added: methods `getApiKeyInfo()`, `stopLimitOrder()` and `batchOrders()` 
 * Fixed: dependencies updated

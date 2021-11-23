@@ -20,9 +20,12 @@ const makeRequestHeaders = function makeRequestHeaders (key, secret, verb, path,
 }
 
 class Valr {
-  constructor({ key, secret }) {
+  constructor({ key, secret, key2, secret2 }) {
     this.key = key
     this.secret = secret
+    this.usePrimaryKey = true
+    this.key2 = key2
+    this.secret2 = secret2
     this.restApiBaseUrl = 'https://api.valr.com'
     this.wsApiBaseUrl = 'wss://api.valr.com'
   }
@@ -52,10 +55,13 @@ class Valr {
       throw new Error('API key and secret key required to use authenticated methods')
     }
 
+    this.usePrimaryKey = !(this.usePrimaryKey && this.key2 && this.secret2)
+    const [key, secret] = this.usePrimaryKey ? [this.key, this.secret] : [this.key2, this.secret2]
+
     const requestPath = `/v1${path}${makeParamsString.call(this, params)}`
     let res  = await superagent(verb, `${this.restApiBaseUrl}/v1${path}`)
       .query(params)
-      .set(makeRequestHeaders(this.key, this.secret, verb, requestPath, body))
+      .set(makeRequestHeaders(key, secret, verb, requestPath, body))
       .send(body)
     return res.body
   }

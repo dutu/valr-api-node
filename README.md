@@ -92,6 +92,19 @@ tradeWebSocket.onerror = (...args) => {
 
 ```
 
+# Constructor
+
+### `Valr({ key, secret, key2, secret2 })`
+
+Parameter         |          | Description
+------------------|----------|-------------
+`key`, `secret`   | optional | API key and secret
+`key2`, `secret2` | optional | Secondary API key and secret
+
+`key` and `secret` are required for authenticated API requests.
+
+A secondary pair of API key and secret can be provided, in which case the authenticated API calls will be made alternatively, one with the primary key/secret one with the secondary key/secret. This feature can be used to take advantage of double API rate limit.
+
 
 # REST API
 
