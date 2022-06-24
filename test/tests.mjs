@@ -5,11 +5,11 @@ import jsonSchema from './helpers/jsonSchemas.js'
 chai.use(chaiJsonSchema)
 const expect = chai.expect
 
-import Valr from '../dist'
+import Valr from '../src/index.mjs'
 
 const delay = ms => new Promise(res => setTimeout(res, ms))
 
-const valr = new Valr({key: process.env.APIKEY, secret:process.env.APISECRET})
+let valr = new Valr({key: process.env.APIKEY, secret:process.env.APISECRET})
 
 let methods = [
   ['getCurrencies', []],
@@ -39,8 +39,8 @@ let methods = [
   ['getSimpleOrderStatus', [{ currencyPair: 'BTCZAR', orderId: '7952019d-9647-4a4f-bf37-71d60e418016' }],],
 //  ['limitOrder', [{ pair: 'BTCZAR', side: 'BUY', quantity: '0.0001', price: '100000', postOnly: true, customerOrderId: '1234' }],],
 //  ['marketOrder', [{ pair: 'BTCZAR', side: 'SELL', amount: '0.0001', customerOrderId: '12345' }],],
-  ['getOrderStatus', [{ currencyPair: 'BTCZAR',  customerOrderId: '1234' }],],
-  ['getOrderStatus', [{ currencyPair: 'BTCZAR',  orderId: '17635598-aca6-46ba-b3ff-0dec3d752aa3' }],],
+  ['getOrderStatus', [{ currencyPair: 'BTCZAR',  customerOrderId: '12345' }],],
+  ['getOrderStatus', [{ currencyPair: 'BTCZAR',  orderId: '7952019d-9647-4a4f-bf37-71d60e418016' }],],
   ['getOpenOrders', [],],
   ['getOrderHistory', [],],
   ['getOrderHistory', [{ skip: 1, limit: 4 }],],
@@ -63,6 +63,11 @@ describe('REST API methods', async function() {
 })
 
 describe('REST API errors', function() {
+  let valr
+  before(function () {
+    valr = new Valr({ key: process.env.APIKEY, secret: process.env.APISECRET })
+  });
+
   it(`throws error 400`, function (done) {
     valr.cancelOrder({ pair: 'BTCZAR', id: '8f31d81e-1a14-4cb0-b29c-2f7fb7a23bc2'})
       .catch((err) => {
@@ -70,6 +75,32 @@ describe('REST API errors', function() {
         done()
       })
 
+  })
+})
+
+describe('apiCallRate', function() {
+  it(`returns expected number of API calls`, async function () {
+    const apiCalls = 11 * 2
+    const expectedRate = valr.apiCallRate + apiCalls
+    for (let i = 0; i < apiCalls / 2; i +=1) {
+      await valr.getBalances()
+      await valr.getOrderBook( { currencyPair: 'BTCZAR' })
+    }
+
+    expect(valr.apiCallRate).to.be.eq(expectedRate)
+  })
+
+  it(`resets after the minute is completed`, async function () {
+    const apiCalls = 11 * 2
+    const expectedRate = valr.apiCallRate + apiCalls
+    for (let i = 0; i < apiCalls / 2; i +=1) {
+      await valr.getBalances()
+      await valr.getOrderBook( { currencyPair: 'BTCZAR' })
+    }
+
+    expect(valr.apiCallRate).to.be.eq(expectedRate)
+    await delay(Math.trunc(Date.now() / 60000) * 60000 + 60000 - Date.now())
+    expect(valr.apiCallRate).to.be.eq(0)
   })
 })
 
