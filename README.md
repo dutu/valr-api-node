@@ -110,6 +110,16 @@ A secondary pair of API key and secret can be provided, in which case the authen
 
 All methods return promises.
 
+## Properties
+
+### `apiCallRate`
+
+Gives the current rate of API calls. The property is read only. The counter is reset at the start of each minute.
+
+It can be used by applications to limit the API call rate to prevent HTTP error code `429` (too many requests) responses from VALR server.
+
+See VALR API documentation for applicable rate limitations: [Rate limiting](https://docs.valr.com/?version=latest#rate-limiting)
+
 ## Public APIs
 
 ### `getCurrencies()`

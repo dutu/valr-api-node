@@ -4,6 +4,11 @@ All notable changes to this module are documented in this file.
 
 valr-api-node module adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.0.1] - 2022-06-24
+* Removed: CommonJS support
+* Added: apiCallRate parameter
+
+
 ## [1.5.0] - 2021-11-23
 * Added: Feature to use secondary api key/secret 
 * Fixed: dependencies updated
