@@ -28,9 +28,29 @@ class Valr {
     this.secret2 = secret2
     this.restApiBaseUrl = 'https://api.valr.com'
     this.wsApiBaseUrl = 'wss://api.valr.com'
+    this._apiCallRate = { startMinute: Math.trunc(Date.now() / 60000) * 60000, rate: 0 }
+  }
+
+  _refreshRate(stepUpRate= 0) {
+    const startMinute = Math.trunc(Date.now() / 60000) * 60000
+    if (this._apiCallRate.startMinute === startMinute) {
+      this._apiCallRate.rate += stepUpRate
+    } else {
+      this._apiCallRate = {
+        startMinute,
+        rate: Math.max(stepUpRate, 0)
+      }
+    }
+
+    return this._apiCallRate.rate
+  }
+
+  get apiCallRate() {
+    return this._refreshRate()
   }
 
   async requestPublic(endpoint, params = {}) {
+    this._refreshRate(1)
     let res  = await superagent
       .get(`${this.restApiBaseUrl}/v1/public${endpoint}`)
       .query(params)
@@ -57,8 +77,8 @@ class Valr {
 
     this.usePrimaryKey = !(this.usePrimaryKey && this.key2 && this.secret2)
     const [key, secret] = this.usePrimaryKey ? [this.key, this.secret] : [this.key2, this.secret2]
-
     const requestPath = `/v1${path}${makeParamsString.call(this, params)}`
+    this._refreshRate(1)
     let res  = await superagent(verb, `${this.restApiBaseUrl}/v1${path}`)
       .query(params)
       .set(makeRequestHeaders(key, secret, verb, requestPath, body))
