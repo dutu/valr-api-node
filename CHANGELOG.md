@@ -4,6 +4,10 @@ All notable changes to this module are documented in this file.
 
 valr-api-node module adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.1.0] - 2022-07-18
+* Added: optional parameters `WebSocketClass` and `options` for the methods `newAccountWebSocket()` and `newTradeWebSocket()` 
+
+
 ## [2.0.1] - 2022-06-24
 * Removed: CommonJS support
 * Added: apiCallRate parameter
@@ -21,7 +25,7 @@ valr-api-node module adheres to [Semantic Versioning](http://semver.org/).
 * Fixed: dependencies updated
 
 ## [1.3.0] - 2020-07-12
-* Added: optional parameter `full` for method `getOrderBook`
+* Added: optional parameter `full` for method `getOrderBook()`
 * Added: method `getStatus()`
 
 ## [1.2.0] - 2020-01-11

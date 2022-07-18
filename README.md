@@ -423,13 +423,19 @@ Parameter          |          | Description
 
 ## Connection
 
-The methods return a [`WebSocket`](https://github.com/websockets/ws) object.
+The methods return a WebSocket object. The WebSocket class that is used to create the websocket can be specified as parameter.  
 
-### `newAccountWebSocket()`
+### `newAccountWebSocket([WebSocketClass, options])`
 Establishes a WebSocket connection to receive streaming updates about your VALR account.
 
+Parameter          |          | Description
+-------------------|----------|-------------
+`WebSocketClass`                         | optional | WebSocketClass that will be used to create the WebSocket. If omitted It defaults to [`WebSocket`](https://github.com/websockets/ws).
+`options` | optional | Object that will be passed to the WebSocket constructor
 
-### `newTradeWebSocket()`
+
+
+### `newTradeWebSocket([WebSocketClass, options])`
 Establishes a WebSocket connection to receive streaming updates about Trade data.
 
 

@@ -1,6 +1,6 @@
 import WebSocket from 'ws'
 import superagent from 'superagent'
-import crypto from 'crypto';
+import crypto from 'crypto'
 
 const makeRequestHeaders = function makeRequestHeaders (key, secret, verb, path, body) {
   const timestamp = Date.now()
@@ -289,16 +289,16 @@ class Valr {
   }
 
     // WebSocket
-  newAccountWebSocket() {
+  newAccountWebSocket(WebSocketClass = WebSocket, options = {}) {
     const requestPath = `/ws/account`
     const headers = makeRequestHeaders(this.key, this.secret, 'GET', requestPath)
-    return new WebSocket(`${this.wsApiBaseUrl}${requestPath}`, { headers })
+    return new WebSocketClass(`${this.wsApiBaseUrl}${requestPath}`, { headers, ...options })
   }
 
-  newTradeWebSocket() {
+  newTradeWebSocket(WebSocketClass = WebSocket, options = {}) {
     const requestPath = `/ws/trade`
     const headers = makeRequestHeaders(this.key, this.secret, 'GET', requestPath)
-    return new WebSocket(`${this.wsApiBaseUrl}${requestPath}`, { headers })
+    return new WebSocketClass(`${this.wsApiBaseUrl}${requestPath}`, { headers,  ...options })
   }
 }
 
